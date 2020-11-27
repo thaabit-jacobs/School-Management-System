@@ -27,6 +27,4 @@ public enum Role {
     };
 
     public abstract  String description();
-
-
 }
