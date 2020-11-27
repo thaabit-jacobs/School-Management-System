@@ -1,4 +1,4 @@
-package net.school.model;
+package net.school.model.actors;
 
 public class Accountant extends Person{
 }

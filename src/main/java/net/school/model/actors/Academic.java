@@ -1,12 +1,10 @@
-package net.school.model;
+package net.school.model.actors;
 
-import net.school.types.Role;
 import net.school.types.Subject;
 
-import java.time.LocalDate;
 import java.util.List;
 
-public class Academic extends Person{
+public abstract class Academic extends Person{
     private List<Subject> registeredSubjects;
 
     public List<Subject> getRegisteredSubjects() {

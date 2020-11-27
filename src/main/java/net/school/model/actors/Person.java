@@ -1,11 +1,11 @@
-package net.school.model;
+package net.school.model.actors;
 
 import net.school.types.Role;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class Person {
+public abstract class Person {
     private int id;
     private String firstName;
     private String lastName;
@@ -14,21 +14,6 @@ public class Person {
     private LocalDate dob;
     private Role role;
     private LocalDateTime dateCreated;
-
-    public Person(){
-
-    }
-
-    public Person(int id, String firstName, String lastName, String email, String mobileNo, LocalDate dob, Role role) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.mobileNo = mobileNo;
-        this.dob = dob;
-        this.role = role;
-        this.dateCreated = LocalDateTime.now();
-    }
 
     public int getId() {
         return id;
