@@ -16,10 +16,22 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import static spark.Spark.*;
+
 public class App {
+
+    static int getHerokuAssignedPort() {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        if (processBuilder.environment().get("PORT") != null) {
+            return Integer.parseInt(processBuilder.environment().get("PORT"));
+        }
+        return 4567; //return default port if heroku-port isn't set (i.e. on localhost)
+    }
 
     public static void main(String[] args)
     {
+
+        port(getHerokuAssignedPort());
        //AdminService.getInstance().insertAdmin(new Admin(1, "Thaabit", "Jacobs", "jacobs@gmail.com","07653698710",  LocalDate.now(), Role.ADMIN, LocalDateTime.now()));
        // AdminService.getInstance().insertAdmin(new Admin(3, "Bob", "Smith", "bob@gmail.com","07653698710",  LocalDate.now(), Role.STUDENT, LocalDateTime.now()));
 /*     StudentService.getInstance().insertStudent(new Student(2, "Bob", "Smith", "bob@gmail.com","07653698710",  LocalDate.now(), Role.STUDENT, LocalDateTime.now(),
