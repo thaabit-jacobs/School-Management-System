@@ -1,10 +1,20 @@
 package net.school.model;
 
+import net.school.types.Role;
 import net.school.types.Status;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Accountant extends Person{
+
+    public Accountant(){
+
+    }
+
+    public Accountant(int id, String firstName, String lastName, String email, String mobileNo, LocalDate dob, Role role, LocalDateTime dateCreated) {
+        super(id, firstName, lastName, email, mobileNo, dob, role, dateCreated);
+    }
 
     public Transaction payStudentFees(Student student, double amount){
         if(amount <= 0 || student.getFeesBalance() == 0){

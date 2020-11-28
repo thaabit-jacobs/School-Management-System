@@ -45,6 +45,9 @@ public class FacultyService {
 
         Collections.sort(faculties);
 
+        if(faculties.size()==0)
+            return 1;
+
         int uniqueId = faculties.get(faculties.size() - 1).getId() + 1;
 
         return uniqueId;

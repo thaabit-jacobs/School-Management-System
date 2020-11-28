@@ -2,9 +2,11 @@ package net.school;
 
 import net.school.controller.AdminController;
 import net.school.controller.StudentController;
+import net.school.model.Accountant;
 import net.school.model.Admin;
 import net.school.model.Faculty;
 import net.school.model.Student;
+import net.school.service.AccountantService;
 import net.school.service.AdminService;
 import net.school.service.FacultyService;
 import net.school.service.StudentService;
@@ -26,7 +28,11 @@ public class App {
         //FacultyService.getInstance().insertFaculty(new Faculty(1, "James", "Smith", "james@gmail.com", "07653698710", LocalDate.now(), Role.FACULTY, LocalDateTime.now(),  new ArrayList<String>(), false));
         //FacultyService.getInstance().insertFaculty(new Faculty(2, "Bob", "Jones", "jones@gmail.com", "07653698710", LocalDate.now(), Role.FACULTY, LocalDateTime.now(),  new ArrayList<String>(), false));
 
-        new AdminController(AdminService.getInstance(), StudentService.getInstance(), FacultyService.getInstance());
-        new StudentController(StudentService.getInstance());
+        new AdminController(AdminService.getInstance(), StudentService.getInstance(), FacultyService.getInstance(), AccountantService.getInstance());
+        //new StudentController(StudentService.getInstance());
+
+       // AccountantService.getInstance().insertAccountant(new Accountant(1, "Bill", "Gates", "gates@micro.com", "0000000000", LocalDate.now(), Role.ACCOUNTANT, LocalDateTime.now()));
+        //AccountantService.getInstance().insertAccountant(new Accountant(2, "Sarah", "Smith", "sarah@gmail.com", "0000000000", LocalDate.now(), Role.ACCOUNTANT, LocalDateTime.now()));
+
     }
 }

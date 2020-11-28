@@ -45,6 +45,9 @@ public class StudentService {
 
         Collections.sort(students);
 
+        if(students.size()==0)
+            return 1;
+
         int uniqueId = students.get(students.size() - 1).getId() + 1;
 
         return uniqueId;

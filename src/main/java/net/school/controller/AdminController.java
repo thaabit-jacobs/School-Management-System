@@ -1,9 +1,11 @@
 package net.school.controller;
 
 import com.google.gson.Gson;
+import net.school.model.Accountant;
 import net.school.model.Admin;
 import net.school.model.Faculty;
 import net.school.model.Student;
+import net.school.service.AccountantService;
 import  net.school.service.AdminService;
 import net.school.service.FacultyService;
 import net.school.service.StudentService;
@@ -29,9 +31,11 @@ public class AdminController {
     }
 
 
-    public AdminController(final AdminService adminService, final StudentService studentService, final FacultyService facultyService){
+    public AdminController(final AdminService adminService, final StudentService studentService, final FacultyService facultyService, final AccountantService accountantService){
 
-        //ADMIN VIEW
+        //ADMIN
+
+        //ADMIN LANDING
         get("/admin/:id", ((request, response) -> {
             Map<String, Object> model = new HashMap<>();
 
@@ -43,11 +47,13 @@ public class AdminController {
                 int adminCount = adminService.selectAllAdmins().size();
                 int studentCount = studentService.selectAllStudents().size();
                 int facultiesCount = facultyService.selectAllFaculties().size();
+                int accountantsCount = accountantService.selectAllAccountants().size();
 
                 model.put("adminName", admin.getFirstName() + " " + admin.getLastName());
                 model.put("adminCount", adminCount);
                 model.put("studentCount", studentCount);
                 model.put("facultiesCount", facultiesCount);
+                model.put("accountantsCount", accountantsCount);
                 model.put("adminId", adminId);
 
                 return render(model, "index.hbs");
@@ -81,6 +87,7 @@ public class AdminController {
             return new Gson().toJson("User not found for id " + adminId);
         }));
 
+        //DELETE ADMIN
         get("/admin/:currentAdminId/admins/delete/:id", ((request, response) -> {
             Map<String, Object> model = new HashMap<>();
             int adminId = Integer.parseInt(request.params("id"));
@@ -99,6 +106,7 @@ public class AdminController {
             return render(model, "admins.hbs");
         }));
 
+        //ADD ADMIN
         get("/admin/:id/admins/add", ((request, response) -> {
             Map<String, Object> model = new HashMap<>();
             int adminId = Integer.parseInt(request.params("id"));
@@ -108,6 +116,7 @@ public class AdminController {
             return render(model, "AddAdminForm.hbs");
         }));
 
+        //ADD ADMIN
         post("/admin/:id/admins/add", ((request, response) -> {
             Map<String, Object> model = new HashMap<>();
             int adminId = Integer.parseInt(request.params("id"));
@@ -130,7 +139,7 @@ public class AdminController {
             return "";
         }));
 
-        //ADMIN STUDENT PANEL
+        //ADMIN STUDENT VIEW
         get("/admin/:id/students", ((request, response) -> {
             Map<String, Object> model = new HashMap<>();
 
@@ -152,6 +161,8 @@ public class AdminController {
             return new Gson().toJson("User not found for id " + adminId);
         }));
 
+        //ADNMIN ADD STUDENT
+
         get("/admin/:id/students/add", ((request, response) -> {
             Map<String, Object> model = new HashMap<>();
 
@@ -162,6 +173,7 @@ public class AdminController {
             return render(model, "addStudentForm.hbs");
         }));
 
+        //ADMIN ADD STUDENT
         post("/admin/:id/students/add", ((request, response) -> {
             Map<String, Object> model = new HashMap<>();
 
@@ -185,6 +197,7 @@ public class AdminController {
             return "";
         }));
 
+        //DELETE STUDENT
         get("/admin/:currentAdminId/students/delete/:id", ((request, response) -> {
             Map<String, Object> model = new HashMap<>();
             int studentId = Integer.parseInt(request.params("id"));
@@ -267,6 +280,75 @@ public class AdminController {
             model.put("currentAdminId", currentAdminId);
 
             return render(model, "faculties.hbs");
+        }));
+
+        ///////////////////////
+        get("/admin/:id/accountants", ((request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+
+            int adminId = Integer.parseInt(request.params("id"));
+
+            Admin admin = adminService.selectAdmin(adminId);
+
+            if(admin != null){
+                List<Accountant> accountantList = accountantService.selectAllAccountants();
+
+                model.put("currentAdminId", adminId);
+                model.put("accountantList", accountantList);
+
+                return render(model, "accountants.hbs");
+            }
+
+            response.status(400);
+
+            return new Gson().toJson("User not found for id " + adminId);
+        }));
+
+        get("/admin/:id/accountants/add", ((request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+
+            int adminId = Integer.parseInt(request.params("id"));
+
+            model.put("adminId", adminId);
+
+            return render(model, "addAccountantForm.hbs");
+        }));
+
+        post("/admin/:id/accountants/add", ((request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+
+            int adminId = Integer.parseInt(request.params("id"));
+
+            String firstName = request.queryParams("firstName");
+            String lastName = request.queryParams("lastName");
+            String email = request.queryParams("email");
+            String mobileNo = request.queryParams("mobileNo");
+            LocalDate dob = LocalDate.parse(request.queryParams("dob"));
+
+           accountantService.insertAccountant(new Accountant(accountantService.getUniquerId(), firstName, lastName, email, mobileNo, dob, Role.ACCOUNTANT, LocalDateTime.now()));
+
+            List<Accountant> accountantList = accountantService.selectAllAccountants();
+
+            model.put("accountantList", accountantList);
+            model.put("adminId", adminId);
+
+            response.redirect("/admin/" + adminId + "/accountants");
+            return "";
+        }));
+
+        get("/admin/:currentAdminId/accountants/delete/:id", ((request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            int accountantId = Integer.parseInt(request.params("id"));
+            int currentAdminId = Integer.parseInt(request.params("currentAdminId"));
+
+            accountantService.deleteAccountant(accountantId);
+
+            List<Accountant> accountantList = accountantService.selectAllAccountants();
+
+            model.put("accountantList", accountantList);
+            model.put("currentAdminId", currentAdminId);
+
+            return render(model, "accountants.hbs");
         }));
 
     }

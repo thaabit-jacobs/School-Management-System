@@ -46,6 +46,9 @@ public class AdminService {
         List<Admin> admins = adminDoa.selectAllAdmins();
         Collections.sort(admins);
 
+        if(admins.size()==0)
+            return 1;
+
         int uniqueId = admins.get(admins.size() - 1).getId() + 1;
 
         return uniqueId;
