@@ -26,7 +26,7 @@ public interface LessonDoa {
     List<LessonName> selectAllLessonsTeacherName();
 
 
-    @SqlUpdate("update lessons set teacher_id=:teacherId, students_attending=:studentAttendingLesson")
+    @SqlUpdate("update lessons set teacher_id=:teacherId, students_attending=:studentAttendingLesson where id=:id")
     boolean updateLesson(@BindBean Lesson lesson);
 
     @SqlUpdate("delete from lessons")

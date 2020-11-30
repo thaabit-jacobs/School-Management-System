@@ -29,4 +29,7 @@ public interface StudentDoa {
     @SqlUpdate("delete from students")
     boolean deleteAllStudents();
 
+    @SqlUpdate("update students set registered_subjects=:registeredSubjects where id=:id")
+    boolean updateStudent(@BindBean Student student);
+
 }

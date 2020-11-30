@@ -44,6 +44,10 @@ public class StudentService {
         return studentDoa.updateStudent(amount, id);
     }
 
+    public synchronized boolean updateStudent(Student student){
+        return studentDoa.updateStudent(student);
+    }
+
     public int getUniqueStudentId(){
         List<Student> students = selectAllStudents();
 

@@ -246,6 +246,40 @@ public class AdminController {
             return "";
         }));
 
+        get("/admin/:adminId/students/subjects/add/:id", ((request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+
+            int adminId = Integer.parseInt(request.params("adminId"));
+            int studentId = Integer.parseInt(request.params("id"));
+
+            List<Subject> subjectList = Arrays.asList(Subject.values());
+
+            model.put("adminId", adminId);
+            model.put("studentId", studentId);
+            model.put("subjectList", subjectList);
+
+            return render(model, "addSubjectForm.hbs");
+        }));
+
+        post("/admin/:adminId/students/subjects/add/:id", ((request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+
+            int adminId = Integer.parseInt(request.params("adminId"));
+            int studentId = Integer.parseInt(request.params("id"));
+            String selectedSubject = request.queryParams("selectedSubject");
+
+            Student student = studentService.selectStudent(studentId);
+            List<String> subjectList = new ArrayList<>(student.getRegisteredSubjects());
+
+            subjectList.add(selectedSubject);
+            student.setRegisteredSubjects(subjectList);
+            studentService.updateStudent(student);
+
+            response.redirect("/admin/" + adminId  + "/students");
+
+            return "";
+        }));
+
         ///////////////////////////
         get("/admin/:id/faculties", ((request, response) -> {
             Map<String, Object> model = new HashMap<>();
@@ -480,6 +514,8 @@ public class AdminController {
             int adminId = Integer.parseInt(request.params("adminId"));
             int lessonId = Integer.parseInt(request.params("lessonId"));
 
+
+            List<Student> allStudents = studentService.selectAllStudents();
             Lesson lesson = LessonService.getInstance().selectLesson(lessonId);
             List<Integer> listStudentIds = lesson.getStudentAttendingLesson();
 
@@ -496,8 +532,67 @@ public class AdminController {
 
             model.put("studentCount", studentCount);
             model.put("studentsList", studentsList);
+            model.put("adminId", adminId);
+            model.put("lessonId", lessonId);
+            model.put("allStudents", allStudents);
 
             return render(model, "adminFacultiesLessonView.hbs");
+        }));
+
+        get("/admin/:adminId/faculties/attendance/lesson/:lessonId/delete/:studentId", ((request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            int adminId = Integer.parseInt(request.params("adminId"));
+            int lessonId = Integer.parseInt(request.params("lessonId"));
+            int studentId = Integer.parseInt(request.params("studentId"));
+
+
+            List<Student> allStudents = studentService.selectAllStudents();
+            Lesson lesson = LessonService.getInstance().selectLesson(lessonId);
+            List<Integer> listStudentIds = new ArrayList<>(lesson.getStudentAttendingLesson());
+
+            listStudentIds.removeIf(a -> a == studentId);
+
+            lesson.setStudentAttendingLesson(listStudentIds);
+            LessonService.getInstance().updateLesson(lesson);
+
+            List<Student> studentsList = new ArrayList<>();
+
+            listStudentIds.forEach(a -> {
+                Student student = studentService.selectStudent(a);
+
+                if(student != null)
+                    studentsList.add(student);
+            });
+
+            int studentCount = studentsList.size();
+
+            model.put("studentCount", studentCount);
+            model.put("studentsList", studentsList);
+            model.put("adminId", adminId);
+            model.put("lessonId", lessonId);
+            model.put("allStudents", allStudents);
+
+            return render(model, "adminFacultiesLessonView.hbs");
+        }));
+
+        post("/admin/:adminId/faculties/attendance/lesson/:lessonId/add", ((request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            int adminId = Integer.parseInt(request.params("adminId"));
+            int lessonId = Integer.parseInt(request.params("lessonId"));
+            String selectedStudent = request.queryParams("selectedStudent");
+
+            int studentToBeAddedId = Integer.parseInt(Character.valueOf(selectedStudent.charAt(selectedStudent.length() - 1)).toString());
+
+            Lesson lesson = LessonService.getInstance().selectLesson(lessonId);
+            List<Integer> listStudentIds = new ArrayList<>(lesson.getStudentAttendingLesson());
+
+            listStudentIds.add(0, studentToBeAddedId);
+            lesson.setStudentAttendingLesson(listStudentIds);
+            LessonService.getInstance().updateLesson(lesson);
+
+            response.redirect("/admin/" + adminId + "/faculties/attendance");
+
+            return "";
         }));
     }
 }

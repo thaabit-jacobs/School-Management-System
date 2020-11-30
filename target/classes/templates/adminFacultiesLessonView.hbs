@@ -35,8 +35,23 @@
 
 <div class="container">
 
-    <h2>Students: </h2>
     <h2>Student count: {{studentCount}}</h2>
+
+    <form class="mb-4" action="/admin/{{adminId}}/faculties/attendance/lesson/{{lessonId}}/add" method="post">
+
+        <div class="form-group">
+            <label for="selectedStudent">Add student: </label>
+            <select class="form-control" id="selectedStudent" name="selectedStudent">
+                {{#allStudents}}
+                    <option>{{firstName}} {{lastName}} {{id}}</option>
+                {{/allStudents}}
+            </select>
+        </div>
+
+        <button role="button" class="btn btn-outline-primary btn-lg mt-2">add</button>
+    </form>
+
+    <h3 class="mb-4">Students: </h3>
 
     <table class="table table-bordered">
         <thead class="thead-dark">
@@ -45,6 +60,7 @@
             <th scope="col">Lastname</th>
             <th scope="col">Email</th>
             <th scope="col">Role</th>
+            <th scope="col">Action</th>
         </tr>
         </thead>
         <tbody>
@@ -55,6 +71,8 @@
                 <td>{{lastName}}</td>
                 <td>{{email}}</td>
                 <td>{{role}}</td>
+                <td>
+                <a class="btn btn-outline-danger" href="/admin/{{adminId}}/faculties/attendance/lesson/{{lessonId}}/delete/{{id}}">delete</a></td>
             </tr>
         {{/studentsList}}
 

@@ -35,8 +35,9 @@
 
 <div class="container">
 
-    <h2>Add Student:</h2>
-    <a class="btn btn-outline-success btn-lg mb-4" href="/admin/{{currentAdminId}}/students/add">add</a>
+    <a class="btn btn-outline-success btn-lg mb-4" href="/admin/{{currentAdminId}}/students/add">add student</a>
+
+    <h3 class="mb-4">Students: </h3>
 
     <table class="table table-bordered">
         <thead class="thead-dark">
@@ -46,6 +47,7 @@
             <th scope="col">Email</th>
             <th scope="col">Role</th>
             <th scope="col">Fees</th>
+            <th scope="col">Registered subjects</th>
             <th scope="col">Action</th>
         </tr>
         </thead>
@@ -58,10 +60,12 @@
                 <td>{{email}}</td>
                 <td>{{role}}</td>
                 <td>{{feesBalance}}</td>
+                <td>{{registeredSubjects}}</td>
                 <td>
-                    <a class="btn btn-outline-success" href="#">update</a>
-                    <a class="btn btn-outline-danger" href="/admin/{{currentAdminId}}/students/delete/{{id}}">delete</a>
-                    <a class="btn btn-outline-success" href="/admin/{{currentAdminId}}/students/fees/{{id}}">fees</a>
+                    <a class="btn btn-outline-success mb-1" href="#">update</a>
+                    <a class="btn btn-outline-danger mb-1" href="/admin/{{currentAdminId}}/students/delete/{{id}}">delete</a>
+                    <a class="btn btn-outline-dark mb-1" href="/admin/{{currentAdminId}}/students/fees/{{id}}">fees</a>
+                    <a class="btn btn-outline-dark mb-1" href="/admin/{{currentAdminId}}/students/subjects/add/{{id}}">add subject</a>
                 </td>
             </tr>
         {{/studentList}}

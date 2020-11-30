@@ -6,15 +6,14 @@ import net.school.model.Accountant;
 import net.school.model.Admin;
 import net.school.model.Faculty;
 import net.school.model.Student;
-import net.school.service.AccountantService;
-import net.school.service.AdminService;
-import net.school.service.FacultyService;
-import net.school.service.StudentService;
+import net.school.model.lessons.Lesson;
+import net.school.service.*;
 import net.school.types.Role;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import static spark.Spark.*;
 
@@ -39,6 +38,14 @@ public class App {
 
         //FacultyService.getInstance().insertFaculty(new Faculty(1, "James", "Smith", "james@gmail.com", "07653698710", LocalDate.now(), Role.FACULTY, LocalDateTime.now(),  new ArrayList<String>(), false));
         //FacultyService.getInstance().insertFaculty(new Faculty(2, "Bob", "Jones", "jones@gmail.com", "07653698710", LocalDate.now(), Role.FACULTY, LocalDateTime.now(),  new ArrayList<String>(), false));
+/*        Lesson lea = LessonService.getInstance().selectLesson(3);
+        List<Integer> lll = new ArrayList<>(lea.getStudentAttendingLesson());
+        lll.add(0);
+        lll.add(0);
+
+        lea.setStudentAttendingLesson(new ArrayList<Integer>());
+
+        LessonService.getInstance().updateLesson(lea);*/
 
         new AdminController(AdminService.getInstance(), StudentService.getInstance(), FacultyService.getInstance(), AccountantService.getInstance());
         //new StudentController(StudentService.getInstance());
