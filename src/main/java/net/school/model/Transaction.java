@@ -1,5 +1,8 @@
 package net.school.model;
 
+import net.school.service.TransactionService;
+import net.school.types.Status;
+
 import java.time.LocalDateTime;
 
 public class Transaction {
@@ -104,6 +107,18 @@ public class Transaction {
 
     public Transaction build(){
         return new Transaction(id, transactionType, transactionAmount, transactionStatus, dateCreated, studentId);
+    }
+
+    public static Transaction performTransaction(Student student, double amount){
+        if(amount <= 0 || student.getFeesBalance() < amount){
+            return new Transaction(TransactionService.getInstance().getUniqueId(), "PAYMENT", amount, Status.ERROR.toString(), LocalDateTime.now(), student.getId());
+        }
+
+        double newStudentFees = student.getFeesBalance() - amount;
+
+        student.setFeesBalance(newStudentFees);
+
+        return new Transaction(TransactionService.getInstance().getUniqueId(), "PAYMENT", amount, Status.SUCCESS.toString(), LocalDateTime.now(), student.getId());
     }
 
     @Override

@@ -20,6 +20,9 @@ public interface StudentDoa {
     @SqlQuery("select * from students")
     List<Student> selectAllStudents();
 
+    @SqlUpdate("update students set fees_balance=? where id=?")
+    boolean updateStudent(double amount, int id);
+
     @SqlUpdate("delete from students where id=:id")
     boolean deleteStudent(@Bind("id") int id);
 

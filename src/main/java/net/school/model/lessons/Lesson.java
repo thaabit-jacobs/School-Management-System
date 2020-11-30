@@ -12,18 +12,19 @@ public final class Lesson {
     private Subject subject;
     private List<Integer> studentAttendingLesson;
 
-    public Lesson(int id, int teacherId, LocalDateTime lessonTime, Subject subject) {
+    public Lesson(int id, int teacherId, Subject subject, LocalDateTime lessonTime, List<Integer> studentAttendingLesson) {
         this.id = id;
         this.teacherId = teacherId;
         this.lessonTime = lessonTime;
         this.subject = subject;
+        this.studentAttendingLesson = studentAttendingLesson;
     }
 
     public int getId() {
         return id;
     }
 
-    public int getTeacher() {
+    public int getTeacherId() {
         return teacherId;
     }
 
@@ -35,11 +36,15 @@ public final class Lesson {
         return subject;
     }
 
+    public List<Integer> getStudentAttendingLesson() {
+        return studentAttendingLesson;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setTeacher(int teacherId) {
+    public void setTeacherId(int teacherId) {
         this.teacherId = teacherId;
     }
 
@@ -49,5 +54,9 @@ public final class Lesson {
 
     public void setSubject(Subject subject) {
         this.subject = subject;
+    }
+
+    public void setStudentAttendingLesson(List<Integer> studentAttendingLesson) {
+        this.studentAttendingLesson = studentAttendingLesson;
     }
 }

@@ -40,6 +40,10 @@ public class StudentService {
         return studentDoa.deleteAllStudents();
     }
 
+    public synchronized boolean updateStudent(double amount, int id){
+        return studentDoa.updateStudent(amount, id);
+    }
+
     public int getUniqueStudentId(){
         List<Student> students = selectAllStudents();
 
