@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import net.school.model.*;
 import net.school.model.lessons.Lesson;
 import net.school.model.lessons.LessonName;
+import net.school.model.lessons.Notes;
+import net.school.model.lessons.NotesDescription;
 import net.school.service.*;
 import net.school.types.Role;
 import net.school.types.Subject;
@@ -257,6 +259,7 @@ public class AdminController {
             model.put("adminId", adminId);
             model.put("studentId", studentId);
             model.put("subjectList", subjectList);
+            model.put("role", "students");
 
             return render(model, "addSubjectForm.hbs");
         }));
@@ -269,10 +272,10 @@ public class AdminController {
             String selectedSubject = request.queryParams("selectedSubject");
 
             Student student = studentService.selectStudent(studentId);
-            List<String> subjectList = new ArrayList<>(student.getRegisteredSubjects());
+            TreeSet<String> subjectList = new TreeSet<>(new ArrayList<>(student.getRegisteredSubjects()));
 
             subjectList.add(selectedSubject);
-            student.setRegisteredSubjects(subjectList);
+            student.setRegisteredSubjects(new ArrayList<>(subjectList));
             studentService.updateStudent(student);
 
             response.redirect("/admin/" + adminId  + "/students");
@@ -364,6 +367,7 @@ public class AdminController {
             model.put("facultiesList", facultiesList);
             model.put("subjectsList", subjectsList);
 
+
             return render(model, "addLessonForm.hbs");
         }));
 
@@ -389,6 +393,113 @@ public class AdminController {
             response.redirect("/admin/" + adminId + "/faculties");
 
             return"";
+        }));
+/////
+        /////
+        get("/admin/:adminId/faculties/subjects/add/:id", ((request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+
+            int adminId = Integer.parseInt(request.params("adminId"));
+            int studentId = Integer.parseInt(request.params("id"));
+
+            List<Subject> subjectList = Arrays.asList(Subject.values());
+
+            model.put("adminId", adminId);
+            model.put("studentId", studentId);
+            model.put("subjectList", subjectList);
+            model.put("role", "faculties");
+
+            return render(model, "addSubjectForm.hbs");
+        }));
+
+        post("/admin/:adminId/faculties/subjects/add/:id", ((request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+
+            int adminId = Integer.parseInt(request.params("adminId"));
+            int studentId = Integer.parseInt(request.params("id"));
+            String selectedSubject = request.queryParams("selectedSubject");
+
+            Faculty faculty = facultyService.selectFaculty(studentId);
+            TreeSet<String> subjectList = new TreeSet<>(new ArrayList<>(faculty.getRegisteredSubjects()));
+
+            subjectList.add(selectedSubject);
+            faculty.setRegisteredSubjects(new ArrayList<>(subjectList));
+            facultyService.updateFaculty(faculty);
+
+            response.redirect("/admin/" + adminId  + "/faculties");
+
+            return "";
+        }));
+
+        get("/admin/:id/faculties/notes", ((request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+
+            int adminId = Integer.parseInt(request.params("id"));
+
+            List<Student> studentList = studentService.selectAllStudents();
+
+            model.put("adminId", adminId);
+            model.put("studentList", studentList);
+
+            return render(model, "adminStudentLessonNotesView.hbs");
+        }));
+
+        get("/admin/:adminId/faculties/notes/:id", ((request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+
+            int adminId = Integer.parseInt(request.params("adminId"));
+            int studentId = Integer.parseInt(request.params("id"));
+
+            List<Lesson> allLessonList = LessonService.getInstance().selectAllLessons();
+            List<String> lessonList = new ArrayList<>();
+
+            allLessonList.forEach(l -> {
+                lessonList.add(l.getId() + " " + l.getSubject() + " " + l.getLessonTime());
+            });
+
+            Student student = studentService.selectStudent(studentId);
+            List<Integer> notesList = student.getNotesForLessons();
+
+            List<Notes> notesListStudent = new ArrayList<>();
+            notesList.forEach(n -> notesListStudent.add(NotesService.getInstance().selectNotes(n.intValue())));
+
+            List<Lesson> lessonsListStudent = new ArrayList<>();
+            notesListStudent.forEach(n -> lessonsListStudent.add(LessonService.getInstance().selectLesson(n.getLessonId())));
+
+            List<Subject> studentNotes = new ArrayList<>();
+            lessonsListStudent.forEach(l -> studentNotes.add(l.getSubject()));
+
+            model.put("adminId", adminId);
+            model.put("lessonList", lessonList);
+            model.put("studentNotes", studentNotes);
+            model.put("studentId", studentId);
+
+            return render(model, "adminFacultiesLessomNotesViewAdd.hbs");
+        }));
+
+        post("/admin/:adminId/faculties/notes/add/:id", ((request, response) -> {
+            int adminId = Integer.parseInt(request.params("adminId"));
+            int studentId = Integer.parseInt(request.params("id"));
+
+            String selectedLessonName = request.queryParams("selectedLesson");
+            int selectedLessonId = Integer.parseInt(Character.valueOf(selectedLessonName.charAt(0)).toString());
+
+            Lesson selectedLesson = LessonService.getInstance().selectLesson(selectedLessonId);
+
+            Notes newNote = new Notes(NotesService.getInstance().getUniqueId(), selectedLessonId, selectedLesson.getSubject().toString());
+
+            Student student = studentService.selectStudent(studentId);
+            Set<Integer> notesList = new TreeSet<>(student.getNotesForLessons());
+            notesList.add(selectedLessonId);
+            student.setNotesForLessons(new ArrayList<>(notesList));
+
+            studentService.updateStudentNotes(student);
+
+            NotesService.getInstance().insertNotes(newNote);
+
+            response.redirect("/admin/" +  adminId + "/faculties/notes/" + studentId);
+
+            return "";
         }));
 
         ///////////////////////

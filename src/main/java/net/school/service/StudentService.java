@@ -48,6 +48,10 @@ public class StudentService {
         return studentDoa.updateStudent(student);
     }
 
+    public synchronized boolean updateStudentNotes(Student student){
+        return studentDoa.updateStudentNotes(student);
+    }
+
     public int getUniqueStudentId(){
         List<Student> students = selectAllStudents();
 

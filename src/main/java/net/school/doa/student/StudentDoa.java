@@ -32,4 +32,7 @@ public interface StudentDoa {
     @SqlUpdate("update students set registered_subjects=:registeredSubjects where id=:id")
     boolean updateStudent(@BindBean Student student);
 
+    @SqlUpdate("update students set lesson_notes=:notesForLessons where id=:id")
+    boolean updateStudentNotes(@BindBean Student student);
+
 }

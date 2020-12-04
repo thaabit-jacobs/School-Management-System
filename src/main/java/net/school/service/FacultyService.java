@@ -40,6 +40,10 @@ public class FacultyService {
         return facultyDoa.deleteAllFaculties();
     }
 
+    public synchronized boolean updateFaculty(Faculty faculty){
+        return facultyDoa.updateFaculty(faculty);
+    }
+
     public int getUniqueId(){
         List<Faculty> faculties = selectAllFaculties();
 

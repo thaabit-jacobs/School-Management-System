@@ -1,6 +1,7 @@
 package net.school.doa.faculty;
 
 import net.school.model.Faculty;
+import net.school.model.Student;
 import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
@@ -24,4 +25,7 @@ public interface FacultyDoa {
 
     @SqlUpdate("delete from faculties")
     boolean deleteAllFaculties();
+
+    @SqlUpdate("update faculties set registered_subjects=:registeredSubjects where id=:id")
+    boolean updateFaculty(@BindBean Faculty faculty);
 }

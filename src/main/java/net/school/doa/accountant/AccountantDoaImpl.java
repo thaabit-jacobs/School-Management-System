@@ -17,13 +17,13 @@ public class AccountantDoaImpl implements AccountantDoa{
     private Jdbi jdbi = Jdbi.create("jdbc:postgresql://localhost:5432/schoolsdb", "thaabit", "1234");
 
     public AccountantDoaImpl() {
-/*        try {
-            jdbi = getJdbiDatabaseConnection("jdbc:postgresql://localhost:5432/banking, thaabit, 1234");
+        try {
+            jdbi = getJdbiDatabaseConnection("jdbc:postgresql://localhost:5432/schoolsdb, thaabit, 1234");
         } catch (URISyntaxException e) {
             e.printStackTrace();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        }*/
+        }
         jdbi.installPlugin((JdbiPlugin) new SqlObjectPlugin());
         jdbi.registerRowMapper(new AccountantMapper());
     }

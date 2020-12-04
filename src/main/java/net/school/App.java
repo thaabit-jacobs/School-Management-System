@@ -46,9 +46,23 @@ public class App {
         lea.setStudentAttendingLesson(new ArrayList<Integer>());
 
         LessonService.getInstance().updateLesson(lea);*/
+/*
+        Student student = StudentService.getInstance().selectStudent(5);
+        List<Integer> lessonNotes = new ArrayList<>(student.getNotesForLessons());
+        lessonNotes.add(1);
+        lessonNotes.add(2);
+        student.setNotesForLessons(lessonNotes);
+        StudentService.getInstance().updateStudentNotes(student);
+
+        student = StudentService.getInstance().selectStudent(6);
+        lessonNotes = new ArrayList<>(student.getNotesForLessons());
+        lessonNotes.add(1);
+        lessonNotes.add(3);
+        student.setNotesForLessons(lessonNotes);
+        StudentService.getInstance().updateStudentNotes(student);*/
 
         new AdminController(AdminService.getInstance(), StudentService.getInstance(), FacultyService.getInstance(), AccountantService.getInstance());
-        //new StudentController(StudentService.getInstance());
+        new StudentController(StudentService.getInstance());
 
        // AccountantService.getInstance().insertAccountant(new Accountant(1, "Bill", "Gates", "gates@micro.com", "0000000000", LocalDate.now(), Role.ACCOUNTANT, LocalDateTime.now()));
         //AccountantService.getInstance().insertAccountant(new Accountant(2, "Sarah", "Smith", "sarah@gmail.com", "0000000000", LocalDate.now(), Role.ACCOUNTANT, LocalDateTime.now()));

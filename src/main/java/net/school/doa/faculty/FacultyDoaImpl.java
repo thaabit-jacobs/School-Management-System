@@ -64,6 +64,11 @@ public class FacultyDoaImpl implements FacultyDoa{
         return jdbi.withExtension(FacultyDoa.class, doa -> doa.deleteAllFaculties());
     }
 
+    @Override
+    public boolean updateFaculty(Faculty faculty) {
+        return jdbi.withExtension(FacultyDoa.class, doa -> doa.updateFaculty(faculty));
+    }
+
     static Jdbi getJdbiDatabaseConnection(String defualtJdbcUrl) throws URISyntaxException, SQLException {
         ProcessBuilder processBuilder = new ProcessBuilder();
         String database_url = processBuilder.environment().get("DATABASE_URL");

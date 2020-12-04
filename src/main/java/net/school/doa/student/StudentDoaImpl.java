@@ -54,6 +54,11 @@ public class StudentDoaImpl implements StudentDoa{
     }
 
     @Override
+    public boolean updateStudentNotes(Student student) {
+        return jdbi.withExtension(StudentDoa.class, doa -> doa.updateStudentNotes(student));
+    }
+
+    @Override
     public Student selectStudent(int id){
         return jdbi.withExtension(StudentDoa.class, doa-> doa.selectStudent(id));
     }
