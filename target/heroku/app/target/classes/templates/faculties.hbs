@@ -35,8 +35,12 @@
 
 <div class="container">
 
-    <h2>Add Faculty:</h2>
-    <a class="btn btn-outline-success btn-lg mb-4" href="/admin/{{currentAdminId}}/faculties/add">add</a>
+    <a class="btn btn-outline-success btn-lg mb-4" href="/admin/{{currentAdminId}}/faculties/add">add faculty</a>
+    <a class="btn btn-outline-success btn-lg mb-4" href="/admin/{{currentAdminId}}/faculties/add/lesson">add lesson</a>
+    <a class="btn btn-outline-success btn-lg mb-4" href="/admin/{{currentAdminId}}/faculties/attendance">attendance</a>
+    <a class="btn btn-outline-success btn-lg mb-4" href="/admin/{{currentAdminId}}/faculties/notes">notes</a>
+
+    <h2 class="mb-4">Faculties: </h2>
 
     <table class="table table-bordered">
         <thead class="thead-dark">
@@ -45,6 +49,7 @@
             <th scope="col">Lastname</th>
             <th scope="col">Email</th>
             <th scope="col">Role</th>
+            <th scope="col">Registered subjects</th>
             <th scope="col">Action</th>
         </tr>
         </thead>
@@ -56,9 +61,11 @@
                 <td>{{lastName}}</td>
                 <td>{{email}}</td>
                 <td>{{role}}</td>
+                <td>{{registeredSubjects}}</td>
                 <td>
-                    <a class="btn btn-outline-success" href="#">update</a>
-                    <a class="btn btn-outline-danger" href="/admin/{{currentAdminId}}/faculties/delete/{{id}}">delete</a>
+                    <a class="btn btn-outline-success mb-1" href="#">update</a>
+                    <a class="btn btn-outline-danger mb-1" href="/admin/{{currentAdminId}}/faculties/delete/{{id}}">delete</a>
+                    <a class="btn btn-outline-dark mb-1" href="/admin/{{currentAdminId}}/faculties/subjects/add/{{id}}">add subject</a>
                 </td>
             </tr>
         {{/facultyList}}
